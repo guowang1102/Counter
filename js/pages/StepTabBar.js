@@ -56,7 +56,7 @@ class StepTabBar extends Component {
     renderTabOption(tab, i) {
         let color = this.props.activeTab == i ? "#6B8E23" : "#ADADAD"; // 判断i是否是当前选中的tab，设置不同的颜色
         let title;
-        if (i == 0) {
+        if (i == this.props.activeTab) {
             title = (<Text style={{color: '#fff'}}>
                 {this.props.tabNames[i]}
             </Text>);
@@ -69,7 +69,11 @@ class StepTabBar extends Component {
             <TouchableOpacity onPress={()=>this.props.goToPage(i)} style={styles.tab} activeOpacity={1}>
                 <View style={styles.tabItem}>
                     <Image source={this.props.tabImgPaths[i]} style={styles.img}>
-                        {title}
+                        {i == this.props.activeTab ? <Text style={{color: '#fff'}}>
+                            {this.props.tabNames[i]}
+                        </Text> : <Text style={{color: '#79868d'}}>
+                            {this.props.tabNames[i]}
+                        </Text>}
                     </Image>
                 </View>
             </TouchableOpacity>
