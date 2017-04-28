@@ -54,16 +54,15 @@ class StepTabBar extends Component {
     // break;
 
     renderTabOption(tab, i) {
-        let color = this.props.activeTab == i ? "#6B8E23" : "#ADADAD"; // 判断i是否是当前选中的tab，设置不同的颜色
+        let textColor = this.props.activeTab == i ? "#ffffff" : '#79868d';
+        let backgroupImg = this.props.activeTab == i ? require('../imgs/step_pressed2.png') : require('../imgs/step_normal2.png');
         return (
             <TouchableOpacity onPress={()=>this.props.goToPage(i)} style={styles.tab} activeOpacity={1}>
                 <View style={styles.tabItem}>
-                    <Image source={this.props.tabImgPaths[i]} style={styles.img}>
-                        {i == this.props.activeTab ? <Text style={{color: '#fff'}}>
+                    <Image source={backgroupImg} style={styles.img}>
+                        <Text style={{color: textColor}}>
                             {this.props.tabNames[i]}
-                        </Text> : <Text style={{color: '#79868d'}}>
-                            {this.props.tabNames[i]}
-                        </Text>}
+                        </Text>
                     </Image>
                 </View>
             </TouchableOpacity>
@@ -109,7 +108,7 @@ const styles = StyleSheet.create({
             color: '#FFF'
         },
         img: {
-            width: width / 3,
+            width: (width - 20) / 3,
             height: 50,
             resizeMode: 'contain',
             justifyContent: 'center',

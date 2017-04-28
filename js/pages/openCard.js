@@ -8,11 +8,14 @@ import {
     TouchableHighlight,
     TouchableOpacity,
     Alert,
+    TextInput,
 } from 'react-native';
 import commonStyles from '../styles/common';
 import DeviceStorage from '../store/DeviceStorage';
 import ScrollableTabView, {DefaultTabBar,} from 'react-native-scrollable-tab-view';
-import StepTabBar from './StepTabBar'
+import StepTabBar from './StepTabBar';
+import Modal from 'react-native-modalbox';
+import Button from 'react-native-button';
 
 class OpenCard extends Component {
 
@@ -20,7 +23,11 @@ class OpenCard extends Component {
         super(props);
         this.state = {
             tabNames: ['基本信息', '持卡人信息', '我要签约'],
-            tabImgPaths: [require('../imgs/busi_step1_pressed.png'), require('../imgs/busi_step2_normal1.png'), require('../imgs/busi_step3_normal.png')],
+            tabImgPaths: [require('../imgs/step_pressed2.png'), require('../imgs/step_normal2.png'), require('../imgs/step_normal2.png')],
+            isOpen: true,
+            isDisabled: true,
+            cardNo: '',
+            count: '',
         };
     }
 
@@ -80,6 +87,14 @@ class OpenCard extends Component {
 
     }
 
+    confirm = () => {
+        // Alert.alert('温馨提示', '点击了确认', [{
+        //     text: 'OK', onPress: () => {
+        //     }
+        // }])
+        this.setState({isOpen: false});
+    }
+
     render() {
         let tabNames = this.state.tabNames;
         let tabImgPaths = this.state.tabImgPaths;
@@ -119,13 +134,41 @@ class OpenCard extends Component {
 
                 </Image>
                 <ScrollableTabView
-                    style={{marginTop: 0,}}
+                    style={{marginTop: 0, marginRight: 10, marginLeft: 10}}
                     renderTabBar={() => <StepTabBar tabNames={tabNames} tabImgPaths={tabImgPaths}/>}
                 >
                     <Text tabLabel='基本信息'>基本信息</Text>
                     <Text tabLabel='持卡人信息'>持卡人信息</Text>
                     <Text tabLabel='我要签约'>我要签约</Text>
                 </ScrollableTabView>
+
+                <Modal
+                    style={styles.modal}
+                    ref='modal'
+                    isOpen={this.state.isOpen}
+                    animationDuration={0}
+                    position={"center"}
+                    onClosed={() => this.setState({isOpen: false})}
+                >
+                    <Text style={{marginTop: 20, marginBottom: 20, color: '#000', fontSize: 20}}>卡号初始化</Text>
+                    <View style={{backgroundColor: '#CCC', height: 1, width: 400}}/>
+                    <View style={styles.input_area}>
+                        <Text style={styles.input_title}>卡号：</Text>
+                        <TextInput style={styles.input_body} placeholder={'首张卡卡号'}
+                                   onChangeText={(cardNo) => this.setState({cardNo})}/>
+                    </View>
+                    <View style={styles.input_area}>
+                        <Text style={styles.input_title}>数量：</Text>
+                        <TextInput style={styles.input_body} placeholder={'生成卡数量'}
+                                   onChangeText={(number) => this.setState({number})}/>
+                    </View>
+                    <Button onPress={this.confirm}
+                            style={styles.btn}>确认</Button>
+
+                    <Button onPress={()=>this.setState({isOpen: false})}
+                            style={styles.btn}>取消</Button>
+                </Modal>
+
             </View>
         );
 
@@ -138,6 +181,40 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         backgroundColor: '#EBEBEB',
         flex: 1
-    }
+    },
+    modal: {
+        justifyContent: 'center',
+        alignItems: 'center',
+        width: 500,
+        height: 300,
+        borderRadius: 8,
+        paddingBottom: 10,
+    },
+    input_area: {
+        width: 400,
+        flexDirection: 'row',
+        height: 50, justifyContent: 'center',
+        alignItems: 'center',
+    },
+    input_title: {
+        width: 100,
+        color: '#000',
+        fontSize: 18,
+        textAlign: 'right',
+    },
+    input_body: {
+        width: 300,
+        height: 50
+    },
+    btn: {
+        margin: 10,
+        backgroundColor: "#FF0000",
+        color: "white",
+        padding: 10,
+        width: 270,
+        height: 50,
+        borderRadius: 3,
+    },
+
 });
 export default OpenCard;
